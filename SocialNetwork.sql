@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.6.14)
 # Database: SocialNetwork
-# Generation Time: 2017-01-22 14:07:36 +0000
+# Generation Time: 2017-01-24 18:54:41 +0000
 # ************************************************************
 
 
@@ -76,6 +76,7 @@ CREATE TABLE `users` (
   `username` varchar(32) DEFAULT NULL,
   `password` varchar(60) DEFAULT NULL,
   `email` text,
+  `verified` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
