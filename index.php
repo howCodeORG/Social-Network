@@ -41,6 +41,9 @@ foreach($followingposts as $post) {
         <textarea name='commentbody' rows='3' cols='50'></textarea>
         <input type='submit' name='comment' value='Comment'>
         </form>
+        ";
+        Comment::displayComments($post['id']);
+        echo "
         <hr /></br />";
 
 
