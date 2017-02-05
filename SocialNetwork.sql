@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.6.14)
 # Database: SocialNetwork
-# Generation Time: 2017-02-03 01:35:15 +0000
+# Generation Time: 2017-02-05 23:49:56 +0000
 # ************************************************************
 
 
@@ -115,6 +115,7 @@ CREATE TABLE `posts` (
   `posted_at` datetime NOT NULL,
   `user_id` int(11) unsigned NOT NULL,
   `likes` int(11) unsigned NOT NULL,
+  `postimg` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
@@ -133,6 +134,7 @@ CREATE TABLE `users` (
   `password` varchar(60) DEFAULT NULL,
   `email` text,
   `verified` tinyint(1) NOT NULL DEFAULT '0',
+  `profileimg` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
