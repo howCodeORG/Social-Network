@@ -21,8 +21,8 @@ if (isset($_POST['comment'])) {
 $followingposts = DB::query('SELECT posts.id, posts.body, posts.likes, users.`username` FROM users, posts, followers
 WHERE posts.user_id = followers.user_id
 AND users.id = posts.user_id
-AND follower_id = 1
-ORDER BY posts.likes DESC;');
+AND follower_id = :userid
+ORDER BY posts.likes DESC;', array(':userid'=>$userid));
 
 foreach($followingposts as $post) {
 
