@@ -96,9 +96,7 @@ CREATE TABLE `post_likes` (
   `post_id` int(11) unsigned NOT NULL,
   `user_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `post_id` (`post_id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `post_likes_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`),
   CONSTRAINT `post_likes_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
