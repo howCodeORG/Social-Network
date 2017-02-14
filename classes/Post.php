@@ -12,6 +12,16 @@ class Post {
 
                 if ($loggedInUserId == $profileUserId) {
 
+                        if (count(self::notify($postbody)) != 0) {
+                                foreach (self::notify($postbody) as $key => $n) {
+                                        $s = $loggedInUserId;
+                                        $r = DB::query('SELECT id FROM users WHERE username=:username', array(':username'=>$key))[0]['id'];
+                                        if ($r != 0) {
+                                                DB::query('INSERT INTO notifications VALUES (\'\', :type, :receiver, :sender)', array(':type'=>$n, ':receiver'=>$r, ':sender'=>$s));
+                                        }
+                                }
+                        }
+
                         DB::query('INSERT INTO posts VALUES (\'\', :postbody, NOW(), :userid, 0, \'\', :topics)', array(':postbody'=>$postbody, ':userid'=>$profileUserId, ':topics'=>$topics));
 
                 } else {
@@ -62,6 +72,19 @@ class Post {
                 }
 
                 return $topics;
+        }
+
+        public static function notify($text) {
+                $text = explode(" ", $text);
+                $notify = array();
+
+                foreach ($text as $word) {
+                        if (substr($word, 0, 1) == "@") {
+                                $notify[substr($word, 1)] = 1;
+                        }
+                }
+
+                return $notify;
         }
 
         public static function link_add($text) {

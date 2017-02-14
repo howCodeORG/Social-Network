@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.6.14)
 # Database: SocialNetwork
-# Generation Time: 2017-02-07 00:30:22 +0000
+# Generation Time: 2017-02-14 02:12:29 +0000
 # ************************************************************
 
 
@@ -71,6 +71,21 @@ CREATE TABLE `login_tokens` (
 
 
 
+# Dump of table notifications
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `notifications`;
+
+CREATE TABLE `notifications` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `type` int(11) unsigned NOT NULL,
+  `receiver` int(10) unsigned NOT NULL,
+  `sender` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
 # Dump of table password_tokens
 # ------------------------------------------------------------
 
@@ -97,6 +112,7 @@ CREATE TABLE `post_likes` (
   `user_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
+  KEY `post_id` (`post_id`),
   CONSTRAINT `post_likes_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
