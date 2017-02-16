@@ -14,13 +14,13 @@ class Post {
 
                         if (count(self::notify($postbody)) != 0) {
                                 foreach (self::notify($postbody) as $key => $n) {
-                                        $s = $loggedInUserId;
-                                        $r = DB::query('SELECT id FROM users WHERE username=:username', array(':username'=>$key))[0]['id'];
-                                        if ($r != 0) {
-                                                DB::query('INSERT INTO notifications VALUES (\'\', :type, :receiver, :sender)', array(':type'=>$n, ':receiver'=>$r, ':sender'=>$s));
+                                                $s = $loggedInUserId;
+                                                $r = DB::query('SELECT id FROM users WHERE username=:username', array(':username'=>$key))[0]['id'];
+                                                if ($r != 0) {
+                                                        DB::query('INSERT INTO notifications VALUES (\'\', :type, :receiver, :sender, :extra)', array(':type'=>$n["type"], ':receiver'=>$r, ':sender'=>$s, ':extra'=>$n["extra"]));
+                                                }
                                         }
                                 }
-                        }
 
                         DB::query('INSERT INTO posts VALUES (\'\', :postbody, NOW(), :userid, 0, \'\', :topics)', array(':postbody'=>$postbody, ':userid'=>$profileUserId, ':topics'=>$topics));
 
@@ -38,6 +38,16 @@ class Post {
                 $topics = self::getTopics($postbody);
 
                 if ($loggedInUserId == $profileUserId) {
+
+                        if (count(self::notify($postbody)) != 0) {
+                                foreach (self::notify($postbody) as $key => $n) {
+                                                $s = $loggedInUserId;
+                                                $r = DB::query('SELECT id FROM users WHERE username=:username', array(':username'=>$key))[0]['id'];
+                                                if ($r != 0) {
+                                                        DB::query('INSERT INTO notifications VALUES (\'\', :type, :receiver, :sender, :extra)', array(':type'=>$n["type"], ':receiver'=>$r, ':sender'=>$s, ':extra'=>$n["extra"]));
+                                                }
+                                        }
+                                }
 
                         DB::query('INSERT INTO posts VALUES (\'\', :postbody, NOW(), :userid, 0, \'\', \'\')', array(':postbody'=>$postbody, ':userid'=>$profileUserId, ':topics'=>$topics));
                         $postid = DB::query('SELECT id FROM posts WHERE user_id=:userid ORDER BY ID DESC LIMIT 1;', array(':userid'=>$loggedInUserId))[0]['id'];
@@ -80,7 +90,7 @@ class Post {
 
                 foreach ($text as $word) {
                         if (substr($word, 0, 1) == "@") {
-                                $notify[substr($word, 1)] = 1;
+                                $notify[substr($word, 1)] = array("type"=>1, "extra"=>' { "postbody": "'.htmlentities(implode($text, " ")).'" } ');
                         }
                 }
 

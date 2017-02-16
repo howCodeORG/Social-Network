@@ -81,6 +81,7 @@ CREATE TABLE `notifications` (
   `type` int(11) unsigned NOT NULL,
   `receiver` int(10) unsigned NOT NULL,
   `sender` int(11) unsigned NOT NULL,
+  `extra` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
