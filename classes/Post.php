@@ -12,8 +12,8 @@ class Post {
 
                 if ($loggedInUserId == $profileUserId) {
 
-                        if (count(self::notify($postbody)) != 0) {
-                                foreach (self::notify($postbody) as $key => $n) {
+                        if (count(Notify::createNotify($postbody)) != 0) {
+                                foreach (Notify::createNotify($postbody) as $key => $n) {
                                                 $s = $loggedInUserId;
                                                 $r = DB::query('SELECT id FROM users WHERE username=:username', array(':username'=>$key))[0]['id'];
                                                 if ($r != 0) {
@@ -39,8 +39,8 @@ class Post {
 
                 if ($loggedInUserId == $profileUserId) {
 
-                        if (count(self::notify($postbody)) != 0) {
-                                foreach (self::notify($postbody) as $key => $n) {
+                        if (count(Notify::createNotify($postbody)) != 0) {
+                                foreach (Notify::createNotify($postbody) as $key => $n) {
                                                 $s = $loggedInUserId;
                                                 $r = DB::query('SELECT id FROM users WHERE username=:username', array(':username'=>$key))[0]['id'];
                                                 if ($r != 0) {
@@ -62,6 +62,7 @@ class Post {
                 if (!DB::query('SELECT user_id FROM post_likes WHERE post_id=:postid AND user_id=:userid', array(':postid'=>$postId, ':userid'=>$likerId))) {
                         DB::query('UPDATE posts SET likes=likes+1 WHERE id=:postid', array(':postid'=>$postId));
                         DB::query('INSERT INTO post_likes VALUES (\'\', :postid, :userid)', array(':postid'=>$postId, ':userid'=>$likerId));
+                        Notify::createNotify("", $postId);
                 } else {
                         DB::query('UPDATE posts SET likes=likes-1 WHERE id=:postid', array(':postid'=>$postId));
                         DB::query('DELETE FROM post_likes WHERE post_id=:postid AND user_id=:userid', array(':postid'=>$postId, ':userid'=>$likerId));
@@ -82,19 +83,6 @@ class Post {
                 }
 
                 return $topics;
-        }
-
-        public static function notify($text) {
-                $text = explode(" ", $text);
-                $notify = array();
-
-                foreach ($text as $word) {
-                        if (substr($word, 0, 1) == "@") {
-                                $notify[substr($word, 1)] = array("type"=>1, "extra"=>' { "postbody": "'.htmlentities(implode($text, " ")).'" } ');
-                        }
-                }
-
-                return $notify;
         }
 
         public static function link_add($text) {
