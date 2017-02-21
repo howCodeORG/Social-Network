@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.6.14)
 # Database: SocialNetwork
-# Generation Time: 2017-02-14 02:12:29 +0000
+# Generation Time: 2017-02-21 02:05:28 +0000
 # ************************************************************
 
 
@@ -67,6 +67,22 @@ CREATE TABLE `login_tokens` (
   UNIQUE KEY `token` (`token`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `login_tokens_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+# Dump of table messages
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `messages`;
+
+CREATE TABLE `messages` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `body` text NOT NULL,
+  `sender` int(11) unsigned NOT NULL,
+  `receiver` int(11) unsigned NOT NULL,
+  `read` tinyint(1) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
