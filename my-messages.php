@@ -8,7 +8,7 @@ if (Login::isLoggedIn()) {
 }
 
 if (isset($_GET['mid'])) {
-        $message = DB::query('SELECT * FROM messages WHERE id=:mid AND receiver=:receiver OR sender=:sender', array(':mid'=>$_GET['mid'], ':receiver'=>$userid, ':sender'=>$userid))[0];
+        $message = DB::query('SELECT * FROM messages WHERE id=:mid AND (receiver=:receiver OR sender=:sender)', array(':mid'=>$_GET['mid'], ':receiver'=>$userid, ':sender'=>$userid))[0];
         echo '<h1>View Message</h1>';
         echo htmlspecialchars($message['body']);
         echo '<hr />';
