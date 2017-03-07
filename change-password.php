@@ -65,7 +65,6 @@ if (Login::isLoggedIn()) {
         die('Not logged in');
 }
 }
-
 ?>
 <h1>Change your Password</h1>
 <form action="<?php if (!$tokenIsValid) { echo 'change-password.php'; } else { echo 'change-password.php?token='.$token.''; } ?>" method="post">
