@@ -10,6 +10,36 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
         } else if ($_GET['url'] == "users") {
 
+        } else if ($_GET['url'] == "posts") {
+
+                $token = $_COOKIE['SNID'];
+
+                $userid = $db->query('SELECT user_id FROM login_tokens WHERE token=:token', array(':token'=>sha1($token)))[0]['user_id'];
+
+                $followingposts = $db->query('SELECT posts.id, posts.body, posts.posted_at, posts.likes, users.`username` FROM users, posts, followers
+                WHERE posts.user_id = followers.user_id
+                AND users.id = posts.user_id
+                AND follower_id = :userid
+                ORDER BY posts.likes DESC;', array(':userid'=>$userid));
+                $response = "[";
+                foreach($followingposts as $post) {
+
+                        $response .= "{";
+                                $response .= '"PostId": '.$post['id'].',';
+                                $response .= '"PostBody": "'.$post['body'].'",';
+                                $response .= '"PostedBy": "'.$post['username'].'",';
+                                $response .= '"PostDate": "'.$post['posted_at'].'",';
+                                $response .= '"Likes": '.$post['likes'].'';
+                        $response .= "},";
+
+
+                }
+                $response = substr($response, 0, strlen($response)-1);
+                $response .= "]";
+
+                http_response_code(200);
+                echo $response;
+
         }
 
 } else if ($_SERVER['REQUEST_METHOD'] == "POST") {

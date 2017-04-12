@@ -3,12 +3,13 @@ include('./classes/DB.php');
 include('./classes/Login.php');
 include('./classes/Post.php');
 include('./classes/Comment.php');
+
 $showTimeline = False;
 if (Login::isLoggedIn()) {
         $userid = Login::isLoggedIn();
         $showTimeline = True;
 } else {
-        echo 'Not logged in';
+        die('Not logged in');
 }
 
 if (isset($_GET['postid'])) {
