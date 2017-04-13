@@ -120,6 +120,7 @@
     <script src="assets/js/bs-animation.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
     <script type="text/javascript">
+
         $(document).ready(function() {
                 $.ajax({
 
@@ -132,15 +133,37 @@
                                 var posts = JSON.parse(r)
                                 $.each(posts, function(index) {
                                         $('.timelineposts').html(
-                                                $('.timelineposts').html() + '<blockquote><p>'+posts[index].PostBody+'</p><footer>Posted by '+posts[index].PostedBy+' on '+posts[index].PostDate+'<button class="btn btn-default" type="button" style="color:#eb3b60;background-image:url(&quot;none&quot;);background-color:transparent;"> <i class="glyphicon glyphicon-heart" data-aos="flip-right"></i><span> '+posts[index].Likes+' Likes</span></button><button class="btn btn-default comment" type="button" style="color:#eb3b60;background-image:url(&quot;none&quot;);background-color:transparent;"><i class="glyphicon glyphicon-flash" style="color:#f9d616;"></i><span style="color:#f9d616;"> Comments</span></button></footer></blockquote>'
+                                                $('.timelineposts').html() + '<blockquote><p>'+posts[index].PostBody+'</p><footer>Posted by '+posts[index].PostedBy+' on '+posts[index].PostDate+'<button class="btn btn-default" data-id="'+posts[index].PostId+'" type="button" style="color:#eb3b60;background-image:url(&quot;none&quot;);background-color:transparent;"> <i class="glyphicon glyphicon-heart" data-aos="flip-right"></i><span> '+posts[index].Likes+' Likes</span></button><button class="btn btn-default comment" type="button" style="color:#eb3b60;background-image:url(&quot;none&quot;);background-color:transparent;"><i class="glyphicon glyphicon-flash" style="color:#f9d616;"></i><span style="color:#f9d616;"> Comments</span></button></footer></blockquote>'
                                         )
+
+                                        $('[data-id]').click(function() {
+                                                var buttonid = $(this).attr('data-id');
+                                                $.ajax({
+
+                                                        type: "POST",
+                                                        url: "api/likes?id=" + $(this).attr('data-id'),
+                                                        processData: false,
+                                                        contentType: "application/json",
+                                                        data: '',
+                                                        success: function(r) {
+                                                                var res = JSON.parse(r)
+                                                                $("[data-id='"+buttonid+"']").html(' <i class="glyphicon glyphicon-heart" data-aos="flip-right"></i><span> '+res.Likes+' Likes</span>')
+                                                        },
+                                                        error: function(r) {
+                                                                console.log(r)
+                                                        }
+
+                                                });
+                                        })
                                 })
+
                         },
                         error: function(r) {
                                 console.log(r)
                         }
 
                 });
+
         });
     </script>
 </body>
