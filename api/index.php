@@ -8,6 +8,25 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
         if ($_GET['url'] == "auth") {
 
+        } else if ($_GET['url'] == "search") {
+
+                $tosearch = explode(" ", $_GET['query']);
+                if (count($tosearch) == 1) {
+                        $tosearch = str_split($tosearch[0], 2);
+                }
+
+                $whereclause = "";
+                $paramsarray = array(':body'=>'%'.$_GET['query'].'%');
+                for ($i = 0; $i < count($tosearch); $i++) {
+                        if ($i % 2) {
+                        $whereclause .= " OR body LIKE :p$i ";
+                        $paramsarray[":p$i"] = $tosearch[$i];
+                        }
+                }
+                $posts = $db->query('SELECT posts.body, users.username, posts.posted_at FROM posts, users WHERE users.id = posts.user_id AND posts.body LIKE :body '.$whereclause.' LIMIT 10', $paramsarray);
+                echo "<pre>";
+                echo json_encode($posts);
+
         } else if ($_GET['url'] == "users") {
 
         } else if ($_GET['url'] == "comments" && isset($_GET['postid'])) {
