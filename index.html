@@ -21,7 +21,9 @@
             <form>
                 <h1 class="text-left">Social Network</h1>
                 <div class="searchbox"><i class="glyphicon glyphicon-search"></i>
-                    <input class="form-control" type="text">
+                    <input class="form-control sbox" type="text">
+                    <ul class="list-group autocomplete" style="position:absolute;width:100%; z-index: 100">
+                    </ul>
                 </div>
                 <div class="dropdown">
                     <button class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">MENU <span class="caret"></span></button>
@@ -48,7 +50,9 @@
                 <div class="collapse navbar-collapse" id="navcol-1">
                     <form class="navbar-form navbar-left">
                         <div class="searchbox"><i class="glyphicon glyphicon-search"></i>
-                            <input class="form-control" type="text">
+                            <input class="form-control sbox" type="text">
+                            <ul class="list-group autocomplete" style="position:absolute;width:100%; z-index:100">
+                            </ul>
                         </div>
                     </form>
                     <ul class="nav navbar-nav hidden-md hidden-lg navbar-right">
@@ -120,6 +124,32 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
+
+                $('.sbox').keyup(function() {
+                        $('.autocomplete').html("")
+                        $.ajax({
+
+                                type: "GET",
+                                url: "api/search?query=" + $(this).val(),
+                                processData: false,
+                                contentType: "application/json",
+                                data: '',
+                                success: function(r) {
+                                        r = JSON.parse(r)
+                                        for (var i = 0; i < r.length; i++) {
+                                                console.log(r[i].body)
+                                                $('.autocomplete').html(
+                                                        $('.autocomplete').html() +
+                                                        '<li class="list-group-item"><span>'+r[i].body+'</span></li>'
+                                                )
+                                        }
+                                },
+                                error: function(r) {
+                                        console.log(r)
+                                }
+                        })
+                })
+
                 $.ajax({
 
                         type: "GET",

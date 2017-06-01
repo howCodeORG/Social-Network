@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
                         }
                 }
                 $posts = $db->query('SELECT posts.body, users.username, posts.posted_at FROM posts, users WHERE users.id = posts.user_id AND posts.body LIKE :body '.$whereclause.' LIMIT 10', $paramsarray);
-                echo "<pre>";
+                //echo "<pre>";
                 echo json_encode($posts);
 
         } else if ($_GET['url'] == "users") {
