@@ -216,6 +216,21 @@ if (isset($_GET['username'])) {
             </div>
         </div>
     </div>
+    <div class="modal fade" role="dialog" tabindex="-1" style="padding-top:100px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+                    <h4 class="modal-title">New Post</h4></div>
+                <div class="modal-body" style="max-height: 400px; overflow-y: auto">
+                    <p>The content of your modal.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="footer-dark">
         <footer>
             <div class="container">
@@ -229,7 +244,13 @@ if (isset($_GET['username'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
     <script type="text/javascript">
 
+    function scrollToAnchor(aid){
+    var aTag = $(aid);
+        $('html,body').animate({scrollTop: aTag.offset().top},'slow');
+    }
+
         $(document).ready(function() {
+
                 $.ajax({
 
                         type: "GET",
@@ -243,7 +264,7 @@ if (isset($_GET['username'])) {
                                         $('.timelineposts').html(
                                                 $('.timelineposts').html() +
 
-                                                '<li class="list-group-item"><blockquote><p>'+posts[index].PostBody+'</p><footer>Posted by '+posts[index].PostedBy+' on '+posts[index].PostDate+'<button class="btn btn-default" type="button" style="color:#eb3b60;background-image:url(&quot;none&quot;);background-color:transparent;" data-id=\"'+posts[index].PostId+'\"> <i class="glyphicon glyphicon-heart" data-aos="flip-right"></i><span> '+posts[index].Likes+' Likes</span></button><button class="btn btn-default comment" data-postid=\"'+posts[index].PostId+'\" type="button" style="color:#eb3b60;background-image:url(&quot;none&quot;);background-color:transparent;"><i class="glyphicon glyphicon-flash" style="color:#f9d616;"></i><span style="color:#f9d616;"> Comments</span></button></footer></blockquote></li>'
+                                                '<li class="list-group-item" id="'+posts[index].PostId+'"><blockquote><p>'+posts[index].PostBody+'</p><footer>Posted by '+posts[index].PostedBy+' on '+posts[index].PostDate+'<button class="btn btn-default" type="button" style="color:#eb3b60;background-image:url(&quot;none&quot;);background-color:transparent;" data-id=\"'+posts[index].PostId+'\"> <i class="glyphicon glyphicon-heart" data-aos="flip-right"></i><span> '+posts[index].Likes+' Likes</span></button><button class="btn btn-default comment" data-postid=\"'+posts[index].PostId+'\" type="button" style="color:#eb3b60;background-image:url(&quot;none&quot;);background-color:transparent;"><i class="glyphicon glyphicon-flash" style="color:#f9d616;"></i><span style="color:#f9d616;"> Comments</span></button></footer></blockquote></li>'
                                         )
 
                                         $('[data-postid]').click(function() {
@@ -287,6 +308,8 @@ if (isset($_GET['username'])) {
                                                 });
                                         })
                                 })
+
+                                scrollToAnchor(location.hash)
 
                         },
                         error: function(r) {

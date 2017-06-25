@@ -140,7 +140,7 @@
                                                 console.log(r[i].body)
                                                 $('.autocomplete').html(
                                                         $('.autocomplete').html() +
-                                                        '<li class="list-group-item"><span>'+r[i].body+'</span></li>'
+                                                        '<a href="profile.php?username='+r[i].username+'#'+r[i].id+'"><li class="list-group-item"><span>'+r[i].body+'</span></li></a>'
                                                 )
                                         }
                                 },
