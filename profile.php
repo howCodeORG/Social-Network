@@ -80,13 +80,6 @@ if (isset($_GET['username'])) {
 }
 
 ?>
-
-<!-- <form action="profile.php?username=<?php echo $username; ?>" method="post" enctype="multipart/form-data">
-        <textarea name="postbody" rows="8" cols="80"></textarea>
-        <br />Upload an image:
-        <input type="file" name="postimg">
-        <input type="submit" name="post" value="Post">
-</form> -->
 <!DOCTYPE html>
 <html>
 
@@ -195,13 +188,13 @@ if (isset($_GET['username'])) {
                     </ul>
                 </div>
                 <div class="col-md-3">
-                    <button class="btn btn-default" type="button" style="width:100%;background-image:url(&quot;none&quot;);background-color:#da052b;color:#fff;padding:16px 32px;margin:0px 0px 6px;border:none;box-shadow:none;text-shadow:none;opacity:0.9;text-transform:uppercase;font-weight:bold;font-size:13px;letter-spacing:0.4px;line-height:1;outline:none;">NEW POST</button>
+                    <button class="btn btn-default" type="button" style="width:100%;background-image:url(&quot;none&quot;);background-color:#da052b;color:#fff;padding:16px 32px;margin:0px 0px 6px;border:none;box-shadow:none;text-shadow:none;opacity:0.9;text-transform:uppercase;font-weight:bold;font-size:13px;letter-spacing:0.4px;line-height:1;outline:none;" onclick="showNewPostModal()">NEW POST</button>
                     <ul class="list-group"></ul>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" role="dialog" tabindex="-1" style="padding-top:100px;">
+    <div class="modal fade" id="commentsmodal" role="dialog" tabindex="-1" style="padding-top:100px;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -216,17 +209,23 @@ if (isset($_GET['username'])) {
             </div>
         </div>
     </div>
-    <div class="modal fade" role="dialog" tabindex="-1" style="padding-top:100px;">
+    <div class="modal fade" id="newpost" role="dialog" tabindex="-1" style="padding-top:100px;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
                     <h4 class="modal-title">New Post</h4></div>
-                <div class="modal-body" style="max-height: 400px; overflow-y: auto">
-                    <p>The content of your modal.</p>
+                <div style="max-height: 400px; overflow-y: auto">
+                        <form action="profile.php?username=<?php echo $username; ?>" method="post" enctype="multipart/form-data">
+                                <textarea name="postbody" rows="8" cols="80"></textarea>
+                                <br />Upload an image:
+                                <input type="file" name="postimg">
+
                 </div>
                 <div class="modal-footer">
+                    <input type="submit" name="post" value="Post" class="btn btn-default" type="button" style="background-image:url(&quot;none&quot;);background-color:#da052b;color:#fff;padding:16px 32px;margin:0px 0px 6px;border:none;box-shadow:none;text-shadow:none;opacity:0.9;text-transform:uppercase;font-weight:bold;font-size:13px;letter-spacing:0.4px;line-height:1;outline:none;">
                     <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -320,8 +319,12 @@ if (isset($_GET['username'])) {
 
         });
 
+        function showNewPostModal() {
+                $('#newpost').modal('show')
+        }
+
         function showCommentsModal(res) {
-                $('.modal').modal('show')
+                $('#commentsmodal').modal('show')
                 var output = "";
                 for (var i = 0; i < res.length; i++) {
                         output += res[i].Comment;

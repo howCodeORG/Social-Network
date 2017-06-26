@@ -51,10 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
                 $userid = $db->query('SELECT user_id FROM login_tokens WHERE token=:token', array(':token'=>sha1($token)))[0]['user_id'];
 
                 $followingposts = $db->query('SELECT posts.id, posts.body, posts.posted_at, posts.likes, users.`username` FROM users, posts, followers
-                WHERE posts.user_id = followers.user_id
+                WHERE (posts.user_id = followers.user_id
+                OR posts.user_id = :userid)
                 AND users.id = posts.user_id
                 AND follower_id = :userid
-                ORDER BY posts.likes DESC;', array(':userid'=>$userid));
+                ORDER BY posts.likes DESC;', array(':userid'=>$userid), array(':userid'=>$userid));
                 $response = "[";
                 foreach($followingposts as $post) {
 
@@ -81,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
                 $followingposts = $db->query('SELECT posts.id, posts.body, posts.posted_at, posts.likes, users.`username` FROM users, posts
                 WHERE users.id = posts.user_id
                 AND users.id = :userid
-                ORDER BY posts.likes DESC;', array(':userid'=>$userid));
+                ORDER BY posts.posted_at DESC;', array(':userid'=>$userid));
                 $response = "[";
                 foreach($followingposts as $post) {
 
@@ -160,6 +161,13 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
         }
 
+        if ($_GET['url'] == "post") {
+                $token = $_COOKIE['SNID'];
+
+                $userid = $db->query('SELECT user_id FROM login_tokens WHERE token=:token', array(':token'=>sha1($token)))[0]['user_id'];
+                echo "Dfdf";
+        }
+
         if ($_GET['url'] == "auth") {
                 $postBody = file_get_contents("php://input");
                 $postBody = json_decode($postBody);
@@ -222,4 +230,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 } else {
         http_response_code(405);
 }
+
+// Helper functions
 ?>
