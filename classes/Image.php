@@ -6,7 +6,7 @@ class Image {
 
                 $options = array('http'=>array(
                         'method'=>"POST",
-                        'header'=>"Authorization: Bearer 813d9b0ee1b108a3383f6bd016dd9260873fa681\n".
+                        'header'=>"Authorization: Bearer a5d4b7d7eb41f3c2049e1212c628996839cc3066\n".
                         "Content-Type: application/x-www-form-urlencoded",
                         'content'=>$image
                 ));
