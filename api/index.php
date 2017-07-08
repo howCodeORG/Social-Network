@@ -8,6 +8,19 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
         if ($_GET['url'] == "auth") {
 
+        } else if ($_GET['url'] == "messages") {
+                $sender = $_GET['sender'];
+                $token = $_COOKIE['SNID'];
+                $receiver = $db->query('SELECT user_id FROM login_tokens WHERE token=:token', array(':token'=>sha1($token)))[0]['user_id'];
+
+                $messages = $db->query('SELECT messages.id, messages.body, s.username AS Sender, r.username AS Receiver
+FROM messages
+LEFT JOIN users s ON messages.sender = s.id
+LEFT JOIN users r ON messages.receiver = r.id
+WHERE (r.id=:r AND s.id=:s) OR r.id=:s AND s.id=:r', array(':r'=>$receiver, ':s'=>$sender));
+echo "<pre>";
+echo json_encode($messages);
+
         } else if ($_GET['url'] == "search") {
 
                 $tosearch = explode(" ", $_GET['query']);
