@@ -103,9 +103,9 @@
                         <li class="list-group-item" id="m" style="overflow:auto;height:500px;margin-bottom:55px;">
                         </li>
                     </ul>
-                    <button class="btn btn-default msg-button-send" type="button">SEND </button>
+                    <button class="btn btn-default msg-button-send" id='sendmessage' type="button">SEND </button>
                     <div class="message-input-div">
-                        <input type="text" style="width:100%;height:45px;outline:none;font-size:16px;">
+                        <input id="messagecontent" type="text" style="width:100%;height:45px;outline:none;font-size:16px;">
                     </div>
                 </div>
             </div>
@@ -140,6 +140,24 @@
     }
 
     $(document).ready(function() {
+
+            $('#sendmessage').click(function() {
+                    $.ajax({
+
+                            type: "POST",
+                            url: "api/message",
+                            processData: false,
+                            contentType: "application/json",
+                            data: '{ "body": "'+ $("#messagecontent").val() +'", "receiver": "'+ SENDER +'" }',
+                            success: function(r) {
+                                    window.location = '';
+                            },
+                            error: function(r) {
+
+                            }
+                    })
+            })
+
             $.ajax({
 
                     type: "GET",

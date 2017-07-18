@@ -128,7 +128,27 @@ echo json_encode($messages);
 
 } else if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-        if ($_GET['url'] == "users") {
+        $token = $_COOKIE['SNID'];
+
+        $userid = $db->query('SELECT user_id FROM login_tokens WHERE token=:token', array(':token'=>sha1($token)))[0]['user_id'];
+
+        $postBody = file_get_contents("php://input");
+        $postBody = json_decode($postBody);
+
+        $body = $postBody->body;
+        $receiver = $postBody->receiver;
+
+        if (strlen($body) > 100) {
+                echo "{ 'Error': 'Message too long!' }";
+        }
+
+        $db->query("INSERT INTO messages VALUES ('', :body, :sender, :receiver, '0')", array(':body'=>$body, ':sender'=>$userid, ':receiver'=>$receiver));
+
+        echo '{ "Success": "Message Sent!" }';
+
+        if ($_GET['url'] == "message") {
+
+        } else if ($_GET['url'] == "users") {
 
                 $postBody = file_get_contents("php://input");
                 $postBody = json_decode($postBody);
