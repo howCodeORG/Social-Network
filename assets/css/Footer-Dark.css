@@ -92,3 +92,42 @@
   border:none;
 }
 
+.message-from-other {
+  width:50%;
+  background-color:#e8e8e8;
+  min-height:40px;
+  border-radius:10px;
+  float:left;
+}
+
+.message-from-me {
+  width:50%;
+  background-color:#f90b44;
+  min-height:40px;
+  border-radius:10px;
+  float:right;
+}
+
+.message-from-other p {
+  color:#010101;
+  padding:10px;
+}
+
+.message-spacer p {
+  color:#FFF;
+  padding:10px;
+  user-select:none;
+}
+
+.message {
+  margin-bottom:0px;
+}
+
+.msg-send-button {
+}
+
+.btn.btn-default.msg-button-send:hover {
+  background-color:#f50530;
+  color:#FFF;
+}
+

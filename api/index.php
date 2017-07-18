@@ -18,7 +18,7 @@ FROM messages
 LEFT JOIN users s ON messages.sender = s.id
 LEFT JOIN users r ON messages.receiver = r.id
 WHERE (r.id=:r AND s.id=:s) OR r.id=:s AND s.id=:r', array(':r'=>$receiver, ':s'=>$sender));
-echo "<pre>";
+
 echo json_encode($messages);
 
         } else if ($_GET['url'] == "search") {
@@ -41,6 +41,11 @@ echo json_encode($messages);
                 echo json_encode($posts);
 
         } else if ($_GET['url'] == "users") {
+
+                $token = $_COOKIE['SNID'];
+                $user_id = $db->query('SELECT user_id FROM login_tokens WHERE token=:token', array(':token'=>sha1($token)))[0]['user_id'];
+                $username = $db->query('SELECT username FROM users WHERE id=:uid', array(':uid'=>$user_id))[0]['username'];
+                echo $username;
 
         } else if ($_GET['url'] == "comments" && isset($_GET['postid'])) {
                 $output = "";
