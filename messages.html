@@ -92,10 +92,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-3">
-                    <ul class="list-group">
-                        <li class="list-group-item" style="background-color:#f1eeee;"><span style="font-size:16px;"><img class="img-circle" src="assets/img/photo.jpg" style="width:32px;margin-right:5px;"><strong>Francis </strong></span></li>
-                        <li class="list-group-item" style="/*background-color:#f1eeee;*/"><span style="font-size:16px;"><img class="img-circle" src="assets/img/photo.jpg" style="width:32px;margin-right:5px;"><strong>howCode </strong></span></li>
-                        <li class="list-group-item" style="/*background-color:#f1eeee;*/"><span style="font-size:16px;"><img class="img-circle" src="assets/img/photo.jpg" style="width:32px;margin-right:5px;"><strong>Verified </strong></span></li>
+                    <ul class="list-group" id="users">
                     </ul>
                 </div>
                 <div class="col-md-9" style="position:relative;">
@@ -123,7 +120,7 @@
     <script src="assets/js/bs-animation.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
     <script type="text/javascript">
-    SENDER = 7;
+    SENDER = window.location.hash.split('#')[1];
     USERNAME = "";
     function getUsername() {
             $.ajax({
@@ -141,6 +138,10 @@
 
     $(document).ready(function() {
 
+            $(window).on('hashchange', function() {
+                    location.reload()
+            })
+
             $('#sendmessage').click(function() {
                     $.ajax({
 
@@ -150,12 +151,30 @@
                             contentType: "application/json",
                             data: '{ "body": "'+ $("#messagecontent").val() +'", "receiver": "'+ SENDER +'" }',
                             success: function(r) {
-                                    window.location = '';
+                                    location.reload()
                             },
                             error: function(r) {
 
                             }
                     })
+            })
+
+            $.ajax({
+
+                    type: "GET",
+                    url: "api/musers",
+                    processData: false,
+                    contentType: "application/json",
+                    data: '',
+                    success: function(r) {
+                            r = JSON.parse(r)
+                            for (var i = 0; i < r.length; i++) {
+                                    $('#users').append('<li id="user'+i+'" data-id='+r[i].id+' class="list-group-item" style="background-color:#FFF;"><span style="font-size:16px;"><strong>'+r[i].username+'</strong></span></li>')
+                                    $('#user'+i).click(function() {
+                                            window.location = 'messages.html#' + $(this).attr('data-id')
+                                    })
+                            }
+                    }
             })
 
             $.ajax({
