@@ -2,7 +2,7 @@
 require_once("DB.php");
 require_once("Mail.php");
 
-$db = new DB("127.0.0.1", "SocialNetwork", "root", "");
+$db = new DB("localhost", "SocialNetwork", "root", "root");
 
 if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
@@ -84,7 +84,6 @@ echo json_encode($messages);
                 $token = $_COOKIE['SNID'];
 
                 $userid = $db->query('SELECT user_id FROM login_tokens WHERE token=:token', array(':token'=>sha1($token)))[0]['user_id'];
-
                 $followingposts = $db->query('SELECT posts.id, posts.body, posts.posted_at, posts.postimg, posts.likes, users.`username` FROM users, posts, followers
                 WHERE (posts.user_id = followers.user_id
                 OR posts.user_id = :userid)
@@ -114,7 +113,6 @@ echo json_encode($messages);
         } else if ($_GET['url'] == "profileposts") {
                 $start = (int)$_GET['start'];
                 $userid = $db->query('SELECT id FROM users WHERE username=:username', array(':username'=>$_GET['username']))[0]['id'];
-
                 $followingposts = $db->query('SELECT posts.id, posts.body, posts.posted_at, posts.postimg, posts.likes, users.`username` FROM users, posts
                 WHERE users.id = posts.user_id
                 AND users.id = :userid
@@ -145,7 +143,11 @@ echo json_encode($messages);
 
 } else if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-        $token = $_COOKIE['SNID'];
+        if (isset($_COOKIE['SNID'])) {
+          $token = $_COOKIE['SNID'];
+        } else {
+          die();
+        }
 
         $userid = $db->query('SELECT user_id FROM login_tokens WHERE token=:token', array(':token'=>sha1($token)))[0]['user_id'];
 
@@ -158,7 +160,15 @@ echo json_encode($messages);
         if (strlen($body) > 100) {
                 echo "{ 'Error': 'Message too long!' }";
         }
-
+        if ($body == null) {
+          $body = "";
+        }
+        if ($receiver == null) {
+          die();
+        }
+        if ($userid == null) {
+          die();
+        }
         $db->query("INSERT INTO messages VALUES ('', :body, :sender, :receiver, '0')", array(':body'=>$body, ':sender'=>$userid, ':receiver'=>$receiver));
 
         echo '{ "Success": "Message Sent!" }';
